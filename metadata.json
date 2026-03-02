@@ -1,0 +1,9 @@
+{
+  "name": "FlowView Legal",
+  "description": "Unified Matter Management, Compliance & Revenue Orchestration for Modern Legal Practices.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "short_name": "FlowView",
+  "name": "FlowView BI Dashboard",
+  "icons": [
+    {
+      "src": "https://storage.googleapis.com/gemynd-public/projects/flowview/fv-logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://storage.googleapis.com/gemynd-public/projects/flowview/fv-logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#F9FAFB",
+  "display": "standalone",
+  "theme_color": "#0284c7"
+}

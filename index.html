@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FlowView | Digital Workforce Orchestration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.1?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'system-ui', 'sans-serif'], 
+                        mono: ['JetBrains Mono', 'monospace'] 
+                    },
+                    colors: {
+                        'primary': '#0284c7',
+                        'background': 'var(--color-background)',
+                        'component': 'var(--color-component)',
+                        'text-primary': 'var(--color-text-primary)',
+                        'text-secondary': 'var(--color-text-secondary)',
+                        'border': 'var(--color-border)',
+                        'danger': '#ef4444',
+                        'warning': '#f59e0b',
+                        'success': '#10b981',
+                        'accent': '#8b5cf6'
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scanline': 'scanline 4s linear infinite',
+                        'progress-indeterminate': 'progress-indeterminate 1.5s infinite linear',
+                        'check-pop': 'check-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        'success-ripple': 'success-ripple 0.8s ease-out',
+                        'confetti-burst': 'confetti-burst 1s ease-out forwards',
+                        'success-flash': 'success-flash 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 0.6, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)' },
+                        },
+                        'scanline': {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
+                        },
+                        'progress-indeterminate': {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        },
+                        'check-pop': {
+                            '0%': { transform: 'scale(0) rotate(-15deg)', opacity: '0' },
+                            '100%': { transform: 'scale(1) rotate(0)', opacity: '1' }
+                        },
+                        'check-draw': {
+                            '0%': { strokeDashoffset: '30' },
+                            '100%': { strokeDashoffset: '0' }
+                        },
+                        'success-ripple': {
+                            '0%': { boxShadow: '0 0 0 0 rgba(16, 185, 129, 0.6)' },
+                            '70%': { boxShadow: '0 0 0 20px rgba(16, 185, 129, 0)' },
+                            '100%': { boxShadow: '0 0 0 0 rgba(16, 185, 129, 0)' }
+                        },
+                        'confetti-burst': {
+                            '0%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+                            '100%': { transform: 'translateY(-100px) scale(0)', opacity: '0' }
+                        },
+                        'success-flash': {
+                            '0%': { backgroundColor: 'transparent' },
+                            '50%': { backgroundColor: 'rgba(16, 185, 129, 0.2)' },
+                            '100%': { backgroundColor: 'transparent' }
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            /* Dark Mode — FlowView Legal */
+            --bg-primary: #131B2B; /* Deep Navy/Slate */
+            --bg-secondary: #1A2436; /* Slightly lighter navy */
+            --bg-tertiary: #233047;
+            --bg-elevated: #1A2436;
+            --bg-card: #1A2436;
+            --bg-card-hover: #233047;
+            --bg-input: #131B2B;
+
+            --accent-primary: #D4AF37; /* Gold */
+            --accent-light: #F3E5AB;
+            --accent-dark: #AA8C2C;
+            --accent-muted: rgba(212, 175, 55, 0.15);
+            --accent-subtle: rgba(212, 175, 55, 0.05);
+            --accent-border: rgba(212, 175, 55, 0.2);
+            --accent-border-hover: rgba(212, 175, 55, 0.4);
+
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
+            --text-faint: #334155;
+
+            --color-success: #10B981;
+            --color-warning: #D4AF37; /* Gold for warning/actions due */
+            --color-danger: #EF4444; /* Red for unbilled/at-risk */
+            --color-info: #3B82F6; /* Blue for active caseload */
+
+            --risk-low: #10B981;
+            --risk-medium: #D4AF37;
+            --risk-high: #F97316;
+            --risk-critical: #EF4444;
+
+            --border-default: #233047;
+            --divider: #233047;
+
+            --glass-bg: rgba(26, 36, 54, 0.85);
+            --glass-blur: 20px;
+            --glass-border: rgba(212, 175, 55, 0.15);
+
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-elevated: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+            /* Legacy mappings for tailwind config compatibility */
+            --color-background: var(--bg-primary);
+            --color-component: var(--bg-card);
+            --color-text-primary: var(--text-primary);
+            --color-text-secondary: var(--text-secondary);
+            --color-border: var(--border-default);
+        }
+
+        [data-theme="light"] {
+            /* Light Mode — Courthouse Morning */
+            --bg-primary: #F5F1EB;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #EDE8E0;
+            --bg-elevated: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F5F1EB;
+            --bg-input: #F5F1EB;
+
+            --accent-primary: #8B6914;
+            --accent-light: #A07817;
+            --accent-dark: #6B5110;
+            --accent-muted: rgba(139, 105, 20, 0.12);
+            --accent-subtle: rgba(139, 105, 20, 0.04);
+            --accent-border: rgba(139, 105, 20, 0.2);
+            --accent-border-hover: rgba(139, 105, 20, 0.4);
+
+            --text-primary: #1A1A2E;
+            --text-secondary: #4A5568;
+            --text-muted: #718096;
+            --text-dim: #718096;
+            --text-faint: #EDE8E0;
+
+            --color-success: #16A34A;
+            --color-warning: #CA8A04;
+            --color-danger: #DC2626;
+            --color-info: #3B82F6;
+
+            --risk-low: #16A34A;
+            --risk-medium: #CA8A04;
+            --risk-high: #EA580C;
+            --risk-critical: #DC2626;
+
+            --border-default: #EDE8E0;
+            --divider: #EDE8E0;
+
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-blur: 20px;
+            --glass-border: rgba(139, 105, 20, 0.12);
+
+            --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+            --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        html, body {
+            overscroll-behavior-y: contain;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(170deg, var(--bg-primary) 0%, var(--bg-secondary) 40%, var(--bg-primary) 100%);
+            position: relative;
+        }
+
+        /* Subtle vertical lines background decoration */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(to right, var(--accent-primary) 1px, transparent 1px);
+            background-size: 80px 100%;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+        .font-serif-body { font-family: 'Libre Baskerville', Georgia, serif; }
+        .font-sans-ui { font-family: system-ui, -apple-system, sans-serif; }
+        .font-mono { font-family: 'Source Code Pro', monospace; }
+
+        #root { height: 100%; width: 100%; display: flex; flex-direction: column; }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 10px; }
+        
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        
+        main { 
+            flex: 1; 
+            overflow: hidden; 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            width: 100%;
+        }
+        
+        .tab-content-container { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 0;
+            scroll-behavior: smooth; 
+            width: 100%;
+        }
+
+        .shadow-glow-primary {
+            box-shadow: 0 0 20px -5px var(--accent-muted);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Path drawing animation for CheckIcon */
+        .animate-check-pop path {
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: check-draw 0.4s ease-out forwards 0.2s;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.10.0",
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "recharts": "https://esm.sh/recharts@2.12.7",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1",
+    "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.1/+esm"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="font-sans antialiased text-sm selection:bg-primary/30">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
