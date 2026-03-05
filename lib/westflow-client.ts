@@ -15,7 +15,10 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 export const supabaseLegal = createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
-  { db: { schema: 'legal' } }
+  { 
+    db: { schema: 'legal' },
+    auth: { persistSession: false }
+  }
 )
 
 const FALLBACK_ACS_ORG_ID = '71077b47-66e8-4fd9-90e7-709773ea6582'
